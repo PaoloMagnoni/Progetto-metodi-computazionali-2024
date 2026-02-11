@@ -155,7 +155,7 @@ class Simulazione:
 				#self.totp+=fotoni_nuovi.size
 				self.fotoni=np.concatenate([self.fotoni, fotoni_nuovi])
 			nstep+=1
-			nuova_riga = pd.DataFrame([{'N * passo': nstep,'Energia ionizzata': self.tot_ion, 'Energia ionizzata nello step': step_ion, 'Numero di particelle attive': self.n_energic_partc()}])
+			nuova_riga = pd.DataFrame([{'N * passo': nstep,'Energia ionizzata totale': self.tot_ion, 'Energia ionizzata nello step': step_ion, 'Numero di particelle attive': self.n_energic_partc()}])
 			df_simulazione = pd.concat([df_simulazione, nuova_riga], ignore_index=True)
 			
 		return df_simulazione, self.tot_ion

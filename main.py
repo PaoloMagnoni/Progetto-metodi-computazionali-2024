@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 import time
 from tqdm import tqdm
-from simulazione2 import Simulazione
+from simulazione import Simulazione
 
 
 #FUNZIONE RUNNARE SIMULAZIONI
@@ -84,75 +84,6 @@ def run_sim(e0,n_iter, step, materiale):
 		av_tot_enion_tuple.append(av_tot_enion)
 		stderr_tot_enion_tuple.append(stderr_tot_enion)
 	return av_activep_tuple, stderr_activep_tuple, enionxstep_tuple, stderr_enionxstep_tuple, max_step_tuple, av_tot_enion_tuple, stderr_tot_enion_tuple
-
-
-"""
-wat_av_activep_tuple = []
-wat_stderr_activep_tuple = []
-wat_max_step_tuple = []
-wat_enionxstep_tuple=[]
-wat_stderr_enionxstep_tuple = []
-for i in energie:
-	wat_activeparticles=[]
-	wat_enionxstep=[]
-	wat_sim=Simulazione(i, acqua)
-	for f in tqdm(range(n_iter), desc=f"Simulazioni acqua liquida: energia iniziale {i} MeV ", unit="iter"):
-		wat_df, _ =wat_sim.stepxstep(step)
-		wat_activeparticles.append(wat_df['Numero di particelle attive'])
-		wat_enionxstep.append(wat_df['Energia ionizzata nello step'])
-	wat_max_step = max(len(s) for s in wat_activeparticles)
-	wat_filled_list_activep = [s.reindex(range(wat_max_step), fill_value=0) for s in wat_activeparticles]
-	wat_arr_activep=np.array([s.values for s in wat_filled_list_activep])    #s.values prende i dati della serie come array 
-	wat_av_activep=np.mean(wat_arr_activep,axis=0)
-	wat_std_per_step = np.std(wat_arr_activep, axis=0, ddof=1)
-	wat_stderr_activep = wat_std_per_step / np.sqrt(n_iter)
-	
-	wat_filled_list_enion = [s.reindex(range(wat_max_step), fill_value=0) for s in wat_enionxstep]
-	wat_arr_enion=np.array([s.values for s in wat_filled_list_enion])    #s.values prende i dati della serie come array 
-	wat_av_enion=np.mean(wat_arr_enion,axis=0)
-	wat_std_enion = np.std(wat_arr_enion, axis=0, ddof=1)
-	wat_stderr_enion = wat_std_enion / np.sqrt(n_iter)
-	
-	wat_av_activep_tuple.append(wat_av_activep)
-	wat_stderr_activep_tuple.append(wat_stderr_activep)
-	wat_enionxstep_tuple.append(wat_av_enion)
-	wat_stderr_enionxstep_tuple.append(wat_stderr_enion)
-	wat_max_step_tuple.append(wat_max_step)
-
-#CSI
-
-csi_av_activep_tuple = []
-csi_stderr_activep_tuple = []
-csi_max_step_tuple = []
-csi_enionxstep_tuple=[]
-csi_stderr_enionxstep_tuple = []
-for i in energie:
-	csi_activeparticles=[]
-	csi_enionxstep=[]
-	csi_sim=Simulazione(i, csi)
-	for f in tqdm(range(n_iter), desc=f"Simulazioni ioduro di cesio: energia iniziale {i} MeV ", unit="iter"):
-		csi_df, _ =csi_sim.stepxstep(step)
-		csi_activeparticles.append(csi_df['Numero di particelle attive'])
-		csi_enionxstep.append(csi_df['Energia ionizzata nello step'])
-	csi_max_step = max(len(s) for s in csi_activeparticles)
-	csi_filled_list_activep = [s.reindex(range(csi_max_step), fill_value=0) for s in csi_activeparticles]
-	csi_arr_activep=np.array([s.values for s in csi_filled_list_activep])    #s.values prende i dati della serie come array 
-	csi_av_activep=np.mean(csi_arr_activep,axis=0)
-	csi_std_per_step = np.std(csi_arr_activep, axis=0, ddof=1)
-	csi_stderr_activep = csi_std_per_step / np.sqrt(n_iter)
-	
-	csi_filled_list_enion = [s.reindex(range(csi_max_step), fill_value=0) for s in csi_enionxstep]
-	csi_arr_enion=np.array([s.values for s in csi_filled_list_enion])    #s.values prende i dati della serie come array 
-	csi_av_enion=np.mean(csi_arr_enion,axis=0)
-	csi_std_enion = np.std(csi_arr_enion, axis=0, ddof=1)
-	csi_stderr_enion = csi_std_enion / np.sqrt(n_iter)
-	
-	csi_av_activep_tuple.append(csi_av_activep)
-	csi_stderr_activep_tuple.append(csi_stderr_activep)
-	csi_enionxstep_tuple.append(csi_av_enion)
-	csi_stderr_enionxstep_tuple.append(csi_stderr_enion)
-	csi_max_step_tuple.append(csi_max_step)
-"""
 
 if __name__ == "__main__":
 	"""
