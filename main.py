@@ -117,8 +117,8 @@ if __name__ == "__main__":
 
 	# Costanti
 
-	acqua=[78.33, 1.981, 'acqua liquida']
-	csi=[11.17,5.605, 'ioduro di cesio']
+	acqua=[78.33, 71.47, 'acqua liquida']
+	csi=[11.17,10.42, 'ioduro di cesio']
 	energie = np.linspace(10000, 100000, 5)
 	colors = ['r', 'g', 'b', 'orange', 'purple']
 
