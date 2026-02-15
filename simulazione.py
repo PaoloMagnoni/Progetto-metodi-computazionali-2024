@@ -50,22 +50,7 @@ class Simulazione:
 		else:
 			self.ec = materiale[0]
 			self.ei= materiale[1]
-
-	def pbrem(self,step):
-		"""
-		
-		Resituisce un booleano True/False in base alla probabilità che un elettrone faccia Bremsstrahlung ad un certo step di simulazione.
-		"""
-		return np.random.random() < 1 - np.exp(-step)
-		   
-	def pfoton(self,step):
-		"""
-		
-		Resituisce un booleano True/False in base alla probabilità che un fotone produca una coppia ad un certo step di simulazione.
-		"""
-		
-		return np.random.random() < 1 - np.exp(-step*(7/9))
-		
+			
 	def	n_energic_partc(self):
 		"""
 		
@@ -103,7 +88,8 @@ class Simulazione:
 		self.tot_ion = self.in_tot_ion 
 		df_simulazione = pd.DataFrame([{'N * passo': 0, 'Energia ionizzata totale': self.tot_ion, 'Energia ionizzata nello step': 0, 'Numero di particelle attive': 1}])
 		nstep=0
-		
+		pbrem = 1 - np.exp(-step)
+		pfoton = 1 - np.exp(-step*(7/9))
 		while self.n_energic_partc()>0:
 			
 			# Energia ionizzata per step
@@ -116,8 +102,8 @@ class Simulazione:
 			self.elettroni[mask_attivi]-= self.ei * step
 			step_ion=self.ei*self.elettroni[mask_attivi].size*step
 			fotoni_nuovi=np.array([])
-			probability=np.array([self.pbrem(step) for _ in self.elettroni])
-			mask_brem= np.logical_and(self.elettroni > self.ec, probability)
+			e_numeri_casuali = np.random.random(self.elettroni.shape)
+			mask_brem= np.logical_and(self.elettroni > self.ec, e_numeri_casuali < pbrem)
 			if np.any(mask_brem):
 				self.elettroni[mask_brem]=self.elettroni[mask_brem]/2
 				fotoni_nuovi=self.elettroni[mask_brem]
@@ -132,8 +118,8 @@ class Simulazione:
 			#Blocco fotoni
 			elettroni_nuovi=np.array([])
 			if self.fotoni.size>0:
-				probability=np.array([self.pfoton(step) for _ in self.fotoni])
-				maskf_produzione = np.logical_and(self.fotoni> 1.022, probability)
+				f_numeri_casuali = np.random.random(self.fotoni.shape)
+				maskf_produzione = np.logical_and(self.fotoni> 1.022, f_numeri_casuali < pfoton)
 				maskf_inattivi = self.fotoni<= 1.022 # 2 m_e c^2 in MeV
 				maskf_rimanenti= ~maskf_inattivi & ~maskf_produzione
 				self.fotoni[maskf_produzione]=self.fotoni[maskf_produzione]/2
@@ -149,10 +135,8 @@ class Simulazione:
 			
 			# Aggiunta particelle nuove
 			if(elettroni_nuovi.size>0):
-				#self.totp+=2*elettroni_nuovi.size
 				self.elettroni=np.concatenate([self.elettroni, elettroni_nuovi, elettroni_nuovi])
 			if(fotoni_nuovi.size>0):
-				#self.totp+=fotoni_nuovi.size
 				self.fotoni=np.concatenate([self.fotoni, fotoni_nuovi])
 			nstep+=1
 			nuova_riga = pd.DataFrame([{'N * passo': nstep,'Energia ionizzata totale': self.tot_ion, 'Energia ionizzata nello step': step_ion, 'Numero di particelle attive': self.n_energic_partc()}])
